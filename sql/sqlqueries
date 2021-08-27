@@ -1,0 +1,206 @@
+1.  Write a mysql statement to find the employee salary is greater than 30000
+
+	SELECT * FROM EMPLOYEE WHERE SALARY >30000;
+
+2. Write mysql statement to show distinct departments
+
+	SELECT  DISTINCT DEPARTMENT FROM EMPLOYEE;
+
+3. Write mysql statement to get records of employees working in IT,Testing    department.
+
+	SELECT * FROM EMPLOYEE WHERE DEPARTMENT IN('IT','Testing');
+
+4. Write mysql statements to get all departments in descending order
+
+	SELECT DISTINCT DEPARTMENT FROM EMPLOYEE ORDER BY DEPARTMENT DESC;
+
+
+5. Write a mysql statement to create a table employee which already exists
+
+	CREATE TABLE EMPLOYEE(
+	ID INT, 
+	NAME VARCHAR(50),
+	DESIGNATION VARCHAR(50),
+	SALARY INT,
+	ADDRESS VARCHAR(50),
+	DEPARTMENT VARCHAR(50));
+
+
+6. Write a mysql statement to find the Highest and lowest pais salary employee    full record.
+
+	SELECT * FROM EMPLOYEE WHERE SALARY IN(SELECT MAX(SALARY) FROM EMPLOYEE , SELECT MIN(SALARY) FROM EMPLOYEE);
+
+
+7. Write a mysql statement to find all the employees that have worked in at least 2
+   departments. Show their name ,departments they work in. Display all results in ascending
+   order.
+
+
+
+
+8. Write a mysql statement to create new database,use newly created database,create table
+and check the list of tables and drop the table
+
+	CREATE DATABASE HELLO;   //CREATE DATABASE
+
+	CREATE TABLE EMPLOYEE(    //CREATE NEW TABLE
+	ID INT, 
+	NAME VARCHAR(50),
+	DESIGNATION VARCHAR(50),
+	SALARY INT,
+	ADDRESS VARCHAR(50),
+	DEPARTMENT VARCHAR(50));
+
+
+
+9. Write a mysql statementto fetch employee records whose designation is manager and salary is between 200000 to 300000.
+
+	SELECT * FROM EMPLOYEE WHERE DESIGNATION='MANAGER' AND SALARY BETWEEN 200000 AND 300000;	
+
+
+10. Write a mysql statement to update the salary by 20000 in Accounts department
+
+	UPDATE EMPLOYEE SET SALARY=20000 WHERE DEPARTMENT='Accounts';
+
+
+11.  Write a mysql statement to alter table by adding new column as doj(dateof joining) into the employee table;
+
+	ALTER TABLE EMPLOYEE ADD DOJ DATE;
+
+12. Write a mysql statement to rename the employee 
+	
+	ALTER TABLE EMPLOYEE RENAME EMPLOYEE;
+
+13. Write a mysql statement to get names which are NOT NULL.
+
+	SELECT * FROM EMPLOYEE WHERE NAME IS NOT NULL;
+
+14. Write a mysql statement to get null doj values
+	
+	SELECT * FROM EMPLOYEE WHERE DOJ IS NULL;
+
+15. Write a mysql statement to get salary between 100000 to 20000 in Accounts and IT departments
+
+	SELECT * FROM EMPLOYEE WHERE DEPARTMENTS IN('IT','ACCOUNTS') AND SALARY 	BETWEEN 20000 AND 100000;
+
+16. Write a mysql statement to show the use of ANY
+
+
+
+
+
+
+___________________________________________________________________________________________________________________________
+
+PART 2
+
+
+Q1: Show the structure of the employees table. Create a query to display the lastName,
+    employeenumber, extension, officecode, reporting manager id and job title for each employee with
+    employee number appearing first. 
+
+	DESC EMPLOYEES;
+	SELECT EMPLOYEENUMBER,LASTNAME,EXTENSION, OFFICECODE,REPORTSTO,JOBTITLE FROM EMPLOYEES;
+
+
+Q2: Create unique JobTitles from employees table.
+	
+	 ALTER TABLE EMPLOYEE ADD CONSTRAINT UNIQUEJOBTITLE UNIQUE (JOBTITLE);
+	//CONSTRAINT NAME=UNIQUEJOBTITLE
+
+Q3: ReCreate the query for question 1 and column name must be appeared as Employee#, Extn,Office_Code, Manager ID and Job Title for each employee and redisplay the     data.
+
+	SELECT CONCAT('Employee',EMPLOYEENUMBER),EXTENSION, OFFICECODE,REPORTSTO,JOBTITLE FROM EMPLOYEES;
+
+
+Q4: show the output from employees table as below : 
+
+		SELECT CONCAT(FIRSTNAME,',',LASTNAME) AS EMPPLOYEE_NAME FROM EMPLOYEES
+
+
+Q5: Create a query to display the Emp# EmplyeeName, Mgr # and ManagerName . In this query all the employees must be displayed with reporting manager
+
+
+	SELECT CONCAT('EMP',FIRSTNAME,LASTNAME),CONCAT('Mgr',reportsto) FROM EMPLOYEES;
+
+
+Q6: Create a query to display the customer name, Contact, and Credit Limit of all those employees who falls in credit limit of between 85100 to 100600. Your output         should be as below.
+
+	SELECT CUSTOMERNAME,CONTACT_PERSON,CREDITLIMIT FROM EMPLOYEES WHERE CREDITLIMIT BETWEEN 85100 AND 100600;
+
+
+Q7: Create a query to display firstname, lastname, office code of employees who are either in office code 4 or 6 and data should be displayed alphabetically based on       firstname.
+
+	SELECT FIRSTNAME, LASTNAME ,OFFICECODE FROM EMPLOYEES WHERE OFFCIECODE IN(4,6) ORDER BY FIRSTNAME;
+
+
+Q8: display the firstname, last name of employees who are not reporting to any manager.
+
+	SELECT FIRSTNAME ,LASTNAME FROM EMPLOYEES WHERE REPORTSTO IS NULL;
+
+Q9: Display contactfirstname, contactlastname state and city of customers who live in some state,
+sort the data in descending order of state and city.
+
+	SELECT CONTACTFIRSTNAME,CONTACTLASTNAME,STATE,CITY FROM CUSTOMER ORDER BY STATE DESC ,CITY DESC; 
+
+Q10: Display contactlastname of customers where there is a at second position in name.
+
+	SELECT CONTACTLASTNAME FROM CUSTOMERS LIMIT 1,1 ;
+
+Q11: Display the contactlastname of customers where there is either “g” or “o” available in name.
+
+	SELECT CONTACTLASTNAME FROM CUSTOMERS WHERE CONTACTLASTNAME LIKE '%G%' OR '%O%';  
+
+Q12: Display firstname, lastname, officecode and jobtitle of employees whose jobtitle is Sales Rep or
+     Sales Manager and whose office code is not equal to 4, 6 and 7
+
+	SELECT FIRSTNAME,LASTNAME,OFFICECODE,JOBTITLE FROM EMPLOYEES WHERE JOBTITLE IN('SALES REP','SALES MANAGER') AND OFFICECODE NOT IN(4,6,7);
+
+
+____________________________________
+
+JOIN
+
+
+Q1: Display firstname, officeCode and City of each employees, where they are working.
+
+	SELECT E.FIRSTNAME,E.OFFICECODE,D.CITY FROM EMPLOYEES E INNER JOIN OFFICES O ON E.OFFICECODE=O.OFFICECODE; 
+	
+Q2: Display the total number of employees working in each city.
+
+	SELECT O.CITY,COUNT(*) FROM EMPLOYEES E INNER JOIN OFFICES O ON E.OFFICECODE=O.OFFICECODE GROUP BY O.CITY; 	
+
+
+Q3: Display the number of employees working in ”Paris”;
+
+	SELECT COUNT(*) FROM EMPLOYEES WHERE OFFICECODE=(SELECT OFFICECODE FROM OFFICES WHERE CITY='Paris');   //USING SUBQUERY	
+
+	SELECT COUNT(*) FROM EMPLOYEES E INNER JOIN OFFICES O ON E.OFFICECODE=O.OFFICECODE WHERE O.CITY='Paris'; 
+
+Q4: Display total number of employees working in cities in which the second letter of the city is ‘a’;
+
+	SELECT COUNT(*) FROM EMPLOYEES E INNER JOIN OFFICES O ON E.OFFICECODE=O.OFFICECODE WHERE O.CITY LIKE '_a%';
+	
+
+Q5: Display the customer first name, customer last name, order number, and order date of all those
+    orders where some kind of comment is given against customer order. 
+
+
+	SELECT C.FIRSTNAME,C.LASTNAME, O.ORDERNUMBER,O.ORDERDATE,O.COMMENTS 	FROM CUSTOMER C INNER JOIN ORDERS 0 ON C.CUSTOMERNUMBER=O.CUSTOMERNUMBER;  
+
+
+Q6: Create a query that displays employee’s office code, Employee first name and all the employees
+who work in the same office code. Give each column an appropriate label. 
+
+	SELECT OFFICECODE, FIRSTNAME FROM EMPLOYEES GROUP BY OFFICECODE;
+
+
+
+
+
+
+
+
+
+
+	
